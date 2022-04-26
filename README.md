@@ -1,1 +1,1 @@
-# CPSC-452-Assignment-2
+# CPSC-452: Assignment 2
