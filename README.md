@@ -11,6 +11,8 @@ Joshua Villasis - JJVillasis@csu.fullerton.edu
 
 Evan Wu - Evanh.wu@csu.fullerton.edu
 
+Po-Tyng (Peter) Wu - gaidepeter@csu.fullerton.edu
+
 ## Programming Language:
 C++
 
