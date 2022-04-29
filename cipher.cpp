@@ -12,9 +12,9 @@ int main(int argc, char** argv)
 	///// Parsing command line arguments /////
 
 	string cipherName = argv[1];	// Name of the cipher (AES/DES)
-	string key = argv[2];					// Encryption key; 16 characters long (DES: 64-bit / AES: 128-bit)
-	string encDec = argv[3];			// Determine encrypt or decrypt
-	string inputFile = argv[4];		// File to read input
+	string key = argv[2];		// Encryption key; 16 characters long (DES: 64-bit / AES: 128-bit)
+	string encDec = argv[3];	// Determine encrypt or decrypt
+	string inputFile = argv[4];	// File to read input
 	string outputFile = argv[5];	// File to write output
 
 
