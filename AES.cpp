@@ -26,7 +26,30 @@ bool AES::setKey(const unsigned char* keyArray)
 	// For documentation, please see https://boringssl.googlesource.com/boringssl/+/2623/include/openssl/aes.h
 	// and aes.cpp example provided with the assignment.
 	
-	
+	// Create var to check if enc or dec based on the first byte 
+	char firstByte = keyArray[0];
+	// Create new array with 16 bytes to validate if key
+	char newKeyArray[16] = {};
+	for (int i = 0; i < sizeof(keyArray) - 1; i++)
+	{
+		// copy keyArray to new array excluding the first byte 
+		newKeyArray[i] = keyArray[i+1];
+	}
+
+	// Check if we are doing enc or dec 
+	if (firstByte == 0x00)
+	{
+		if(AES_set_encrypt_key(newKeyArray, 128, &key)!=0)
+			return false;
+		return true;
+	}
+	else
+	{
+		if(AES_set_decrypt_key(newKeyArray, 128, &key) != 0)
+			return false;
+		return true;
+	}
+
 	return false;
 	
 }
