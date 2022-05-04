@@ -12,7 +12,8 @@ int main(int argc, char** argv)
 	///// Parsing command line arguments /////
 
 	string cipherName = argv[1];	// Name of the cipher (AES/DES)
-	string key = argv[2];		// Encryption key; 16 characters long (DES: 64-bit / AES: 128-bit)
+	const unsigned char* key = reinterpret_cast<const unsigned char*>(argv[2]);		// Encryption key; 16 characters long (DES: 64-bit / AES: 128-bit)
+	//const unsigned char * key = reinterpret_cast<const unsigned char*>(keyStr.c_str());
 	string encDec = argv[3];	// Determine encrypt or decrypt
 	string inputFile = argv[4];	// File to read input
 	string outputFile = argv[5];	// File to write output
@@ -26,13 +27,15 @@ int main(int argc, char** argv)
 	out.open(outputFile);
 
 	//Text from input file
-	string inputText;
+	string input;
+	const unsigned char* inputText;
 
 	//Check if input file can be found
 	if(in.is_open())
 	{
 		//Read text from input file
-		getline(in, inputText);
+		getline(in, input);
+		inputText = reinterpret_cast<const unsigned char*>(input.c_str());
 	}
 	//Input cannot be found
 	else
@@ -46,14 +49,6 @@ int main(int argc, char** argv)
 
 	//Create an instance of a cipher
 	CipherInterface* cipher = NULL;
-
-	//Error check
-	if(!cipher)
-	{
-		fprintf(stderr, "ERROR [%s %s %d]: could not allocate memory\n",
-		__FILE__, __FUNCTION__, __LINE__);
-		exit(-1);
-	}
 
 	//Determine which cipher is chosen
 	//AES Cipher
@@ -69,12 +64,19 @@ int main(int argc, char** argv)
 	//Unknown Cipher
 	else
 	{
-		cout << "The cipher \"" << cipherName << "\" is unknown.\n"
-		exit(-1)
+		cout << "The cipher \"" << cipherName << "\" is unknown.\n";
+		exit(-1);
 	}
 
 
 	///// Performing Cryptographic Process /////
+
+	//Check if key is exactly 16 characters long
+	if(strlen((char*) key) != 16)
+	{
+		cout << "Key \'" << key << "\" Must be exactly 16 characters long.\n";
+		exit(-1);
+	}
 
 	//Set key for cipher
 	if(!cipher->setKey(key))
@@ -86,13 +88,13 @@ int main(int argc, char** argv)
 	//Perfrom encryption
 	if(encDec == "ENC")
 	{
-		string ciphertext = cipher->encrypt(inputText);
+		unsigned char * ciphertext = cipher->encrypt(inputText);
 		out << ciphertext << endl;
 	}
 	//Perform decryption
 	else if(encDec == "DEC")
 	{
-		string plaintext = cipher->decrypt(inputText);
+		unsigned char * plaintext = cipher->decrypt(inputText);
 		out << plaintext << endl;
 	}
 	//ERROR: Unknown process

@@ -29,13 +29,13 @@ bool AES::setKey(const unsigned char* keyArray)
 	// Create var to check if enc or dec based on the first byte 
 	char firstByte = keyArray[0];
 	// Create new array with 16 bytes to validate if key
-	char newKeyArray[16] = {};
+	unsigned char newKeyArray[16] = {};
 	for (int i = 0; i < sizeof(keyArray) - 1; i++)
 	{
 		// copy keyArray to new array excluding the first byte 
 		newKeyArray[i] = keyArray[i+1];
 	}
-
+	
 	// Check if we are doing enc or dec 
 	if (firstByte == 0x00)
 	{
@@ -63,11 +63,15 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
 {
 	
 	//TODO: 1. Dynamically allocate a block to store the ciphertext.
+	unsigned char ciphertext[17];
+	// Clear the buffer
+	memset(ciphertext, 0, 17);
 	//	2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
+	AES_ecb_encrypt(plainText, ciphertext, &key, AES_ENCRYPT);
 	// 	3. Return the pointer to the ciphertext
 		
-	return NULL;	
+	return ciphertext;	
 }
 
 /**
