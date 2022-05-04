@@ -35,7 +35,7 @@ bool AES::setKey(const unsigned char* keyArray)
 		// copy keyArray to new array excluding the first byte 
 		newKeyArray[i] = keyArray[i+1];
 	}
-	
+	// newKeyArray should have 16 bytes now
 	// Check if we are doing enc or dec 
 	if (firstByte == 0x00)
 	{
@@ -51,7 +51,6 @@ bool AES::setKey(const unsigned char* keyArray)
 	}
 
 	return false;
-	
 }
 
 /**	
@@ -63,15 +62,15 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
 {
 	
 	//TODO: 1. Dynamically allocate a block to store the ciphertext.
-	unsigned char ciphertext[17];
+	unsigned char cipherText[17];
 	// Clear the buffer
-	memset(ciphertext, 0, 17);
+	memset(cipherText, 0, 17);
 	//	2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
-	AES_ecb_encrypt(plainText, ciphertext, &key, AES_ENCRYPT);
+	AES_ecb_encrypt(plainText, cipherText, &key, AES_ENCRYPT);
 	// 	3. Return the pointer to the ciphertext
 		
-	return ciphertext;	
+	return cipherText;	
 }
 
 /**
@@ -83,11 +82,15 @@ unsigned char* AES::decrypt(const unsigned char* cipherText)
 {
 	
 	//TODO: 1. Dynamically allocate a block to store the plaintext.
+	unsigned char plainText[17];
+	// Clear the buffer 
+	memset(plainText, 0, 17);
 	//	2. Use AES_ecb_encrypt(...) to decrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
+	AES_ecb_encrypt(cipherText, plainText, &key, AES_DECRYPT);
 	// 	3. Return the pointer to the plaintext
 		
-	return NULL;
+	return plainText;
 }
 
 
