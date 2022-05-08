@@ -29,23 +29,21 @@ bool AES::setKey(const unsigned char* keyArray)
 	// Create var to check if enc or dec based on the first byte 
 	char firstByte = keyArray[0];
 	// Create new array with 16 bytes to validate if key
-	unsigned char newKeyArray[16] = {};
-	for (int i = 0; i < sizeof(keyArray) - 1; i++)
-	{
-		// copy keyArray to new array excluding the first byte 
-		newKeyArray[i] = keyArray[i+1];
-	}
+	unsigned char* newKeyArray = new unsigned char[32];
+	//memcpy(newKeyArray, keyArray, 32);
+	copy(keyArray + 2, keyArray + 31, newKeyArray);
 	// newKeyArray should have 16 bytes now
 	// Check if we are doing enc or dec 
-	if (firstByte == 0x00)
+	
+	if (firstByte == '0')
 	{
-		if(AES_set_encrypt_key(newKeyArray, 128, &key)!=0)
+		if(AES_set_encrypt_key(newKeyArray, 128, &this->key)!=0)
 			return false;
 		return true;
 	}
 	else
 	{
-		if(AES_set_decrypt_key(newKeyArray, 128, &key) != 0)
+		if(AES_set_decrypt_key(newKeyArray, 128, &this->key) != 0)
 			return false;
 		return true;
 	}
@@ -67,7 +65,7 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
 	memset(cipherText, 0, 17);
 	//	2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
-	AES_ecb_encrypt(plainText, cipherText, &key, AES_ENCRYPT);
+	AES_ecb_encrypt(plainText, cipherText, &this->key, AES_ENCRYPT);
 	// 	3. Return the pointer to the ciphertext
 		
 	return cipherText;	
@@ -87,7 +85,7 @@ unsigned char* AES::decrypt(const unsigned char* cipherText)
 	memset(plainText, 0, 17);
 	//	2. Use AES_ecb_encrypt(...) to decrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
-	AES_ecb_encrypt(cipherText, plainText, &key, AES_DECRYPT);
+	AES_ecb_encrypt(cipherText, plainText, &this->key, AES_DECRYPT);
 	// 	3. Return the pointer to the plaintext
 		
 	return plainText;
