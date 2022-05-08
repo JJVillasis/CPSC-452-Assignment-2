@@ -26,6 +26,23 @@ bool AES::setKey(const unsigned char* keyArray)
 	// For documentation, please see https://boringssl.googlesource.com/boringssl/+/2623/include/openssl/aes.h
 	// and aes.cpp example provided with the assignment.
 	
+	// creates array that is ready for the 17 byte key
+	unsigned char* key = new unsigned char[16];
+	
+	for (int i = 0; i<16l i++){
+	key[i] = keyArrayp[i];
+	} 
+	//checks for encryption
+	if(key[0] == '0'){
+	
+		return AES_set_encrypt_key(key,128,&this->enc_key);
+	}
+	
+	//handles decryption
+	else{
+	
+		return AES_set_decrypt(key,128,&this->dec_key);
+	}
 	
 	return false;
 	
@@ -43,8 +60,12 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
 	//	2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
 	// 	3. Return the pointer to the ciphertext
-		
-	return NULL;	
+	//1.
+	unsigned char* citext = new unsigned char[16];
+	//2.
+	AES_ecb_encrypt(plainText,citext,&this->enckey,AES_ENCRYPT);
+	//3.
+	return citext;	
 }
 
 /**
@@ -59,8 +80,12 @@ unsigned char* AES::decrypt(const unsigned char* cipherText)
 	//	2. Use AES_ecb_encrypt(...) to decrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
 	// 	3. Return the pointer to the plaintext
+	//1.
+	unsigned char* citext = new unsigned char[17];
+	//2.
+	AES_ecb_encrypt(cipherText, citext, &this->dec_key, AES_DECRYPT);
 		
-	return NULL;
+	return citext;
 }
 
 
