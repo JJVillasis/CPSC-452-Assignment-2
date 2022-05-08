@@ -80,8 +80,12 @@ unsigned char* AES::decrypt(const unsigned char* cipherText)
 	//	2. Use AES_ecb_encrypt(...) to decrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
 	// 	3. Return the pointer to the plaintext
+	//1.
+	unsigned char* citext = new unsigned char[17];
+	//2.
+	AES_ecb_encrypt(cipherText, citext, &this->dec_key, AES_DECRYPT);
 		
-	return NULL;
+	return citext;
 }
 
 
