@@ -5,6 +5,8 @@ Benjamin Ahn - benahn333@csu.fullerton.edu
 
 Lyba Batla - lybabatla@csu.fullerton.edu
 
+Nathaniel Marquez - nathanielmarquez@csu.fullerton.edu
+
 Casey Thatsanaphonh - cthatsanaphonh@csu.fullerton.edu
 
 Joshua Villasis - JJVillasis@csu.fullerton.edu
