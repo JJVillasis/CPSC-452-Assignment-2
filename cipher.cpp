@@ -81,7 +81,7 @@ int main(int argc, char** argv)
 	}
 
 	//DES Cipher
- if(cipherName == "DES")
+ else if(cipherName == "DES")
 	{
 		cipher = new DES();
 		blockSize = 8;
