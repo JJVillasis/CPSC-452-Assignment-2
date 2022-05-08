@@ -127,6 +127,8 @@ int main(int argc, char** argv)
 
 			index += blockSize;
 		}
+
+		out << endl;
 	}
 	//Perform decryption
 	else if(encDec == "DEC")
@@ -143,6 +145,8 @@ int main(int argc, char** argv)
 
 			index += blockSize;
 		}
+
+		out << endl;
 	}
 	//ERROR: Unknown process
 	else
@@ -150,6 +154,11 @@ int main(int argc, char** argv)
 		cout << "Unknown Process: \"" << encDec << "\"\n";
 		exit(-1);
 	}
+
+	//// Close files ////
+
+	in.close();
+	out.close();
 
 	return 0;
 }
