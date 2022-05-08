@@ -57,6 +57,13 @@ int main(int argc, char** argv)
 		cipher = new AES();
 		blockSize = 16;
 
+		//Check if key is exactly 32 characters long
+		if(keyInput.length() != 32)
+		{
+			cout << "Key \'" << keyInput << "\" Must be exactly 32 characters long.\n";
+			exit(-1);
+		}
+
 		//Add byte in beggining of key
 		if(encDec == "ENC")
 			keyInput = "00" + keyInput;
@@ -64,13 +71,6 @@ int main(int argc, char** argv)
 			keyInput = "11" + keyInput;
 
 		const unsigned char* key = reinterpret_cast<const unsigned char*>(keyInput.c_str());
-
-		//Check if key is exactly 32 characters long
-		if(strlen((char*) key) != 32)
-		{
-			cout << "Key \'" << key << "\" Must be exactly 32 characters long.\n";
-			exit(-1);
-		}
 
 		//Set key for cipher
 		if(!cipher->setKey(key))
