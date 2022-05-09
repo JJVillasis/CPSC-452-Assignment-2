@@ -42,4 +42,4 @@ Each parameter is defined as follows:
 Not implemented.
 
 ## Special Information
-The plaintext "testing123451234" does not appear to process correctly. We are not sure why this is, though.
+The plaintext `testing123451234` does not appear to process correctly. We are not sure why this is, though.
