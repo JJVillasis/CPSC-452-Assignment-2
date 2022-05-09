@@ -1,6 +1,7 @@
 #include <iostream>
-#include <fstream>
 #include <string>
+#include <stdio.h>
+#include <stdlib.h>
 #include "CipherInterface.h"
 #include "DES.h"
 #include "AES.h"
@@ -16,31 +17,6 @@ int main(int argc, char** argv)
 	string encDec = argv[3];			// Determine encrypt or decrypt
 	string inputFile = argv[4];		// File to read input
 	string outputFile = argv[5];	// File to write output
-
-
-	///// Reading the input file /////
-
-	//Open input and output files
-	ifstream in(inputFile);
-	ofstream out;
-	out.open(outputFile);
-
-	//Text from input file
-	string input;
-
-	//Check if input file can be found
-	if(in.is_open())
-	{
-		//Read text from input file
-		getline(in, input);
-	}
-	//Input cannot be found
-	else
-	{
-		cout << "Unable to open file \"" << inputFile << "\". File does not exist.\n";
-		exit(-1);
-	}
-
 
 	///// Handling Cipher Interface /////
 
@@ -110,43 +86,50 @@ int main(int argc, char** argv)
 		exit(-1);
 	}
 
+	//Open input file
+	FILE *inFile;
+	unsigned char* input;
+	long textSize;
+
+	inFile = fopen(inputFile.c_str(), "rb");
+	if(inFile == NULL)
+	{
+			cout << "Unable to open file \"" << inputFile << "\". File does not exist.\n";
+			exit(-1);
+	}
+
+	input = (unsigned char*) malloc (sizeof(unsigned char)*blockSize);
+
+	//Open output file
+	FILE *outFile;
+	outFile = fopen(outputFile.c_str(), "wb");
+
+
 	///// Performing Cryptographic Process /////
 
 	//Perfrom encryption
 	if(encDec == "ENC")
 	{
-		string plaintext;
-		int index = 0;
-		while(index < input.length())
+		while(textSize = fread(input, 1, blockSize, inFile) >= 1)
 		{
-			plaintext = input.substr(index, blockSize);
-			const unsigned char* inputText = reinterpret_cast<const unsigned char*>(plaintext.c_str());
+			const unsigned char* inputText = reinterpret_cast<const unsigned char*>(input);
 
 			unsigned char * ciphertext = cipher->encrypt(inputText);
-			out << ciphertext;
-
-			index += blockSize;
+			fwrite(ciphertext, 1, blockSize, outFile);
+			memset(input, 0, blockSize);
 		}
-
-		out << endl;
 	}
 	//Perform decryption
 	else if(encDec == "DEC")
 	{
-		string ciphertext;
-		int index = 0;
-		while(index < input.length())
+		while(textSize = fread(input, 1, blockSize, inFile) >= 1)
 		{
-			ciphertext = input.substr(index, blockSize);
-			const unsigned char* inputText = reinterpret_cast<const unsigned char*>(ciphertext.c_str());
+			const unsigned char* inputText = reinterpret_cast<const unsigned char*>(input);
 
 			unsigned char * plaintext = cipher->decrypt(inputText);
-			out << plaintext;
-
-			index += blockSize;
+			fwrite(plaintext, 1, blockSize, outFile);
+			memset(input, 0, blockSize);
 		}
-
-		out << endl;
 	}
 	//ERROR: Unknown process
 	else
@@ -157,8 +140,8 @@ int main(int argc, char** argv)
 
 	//// Close files ////
 
-	in.close();
-	out.close();
+	fclose(inFile);
+	fclose(outFile);
 
 	return 0;
 }
