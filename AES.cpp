@@ -25,27 +25,25 @@ bool AES::setKey(const unsigned char* keyArray)
 	// Both functions return 0 on success and other values on faliure.
 	// For documentation, please see https://boringssl.googlesource.com/boringssl/+/2623/include/openssl/aes.h
 	// and aes.cpp example provided with the assignment.
-	
-	// creates array that is ready for the 17 byte key
-	unsigned char* key = new unsigned char[16];
-	
-	for (int i = 0; i<16l i++){
-	key[i] = keyArrayp[i];
-	} 
-	//checks for encryption
-	if(key[0] == '0'){
-	
-		return AES_set_encrypt_key(key,128,&this->enc_key);
+	// Create new array with 16 bytes to validate if key
+	unsigned char* newKeyArray = new unsigned char[32];
+
+	copy(keyArray + 2, keyArray + 31, newKeyArray);
+	// newKeyArray should have 16 bytes now
+	// Check if we are doing enc or dec 
+	int test;
+	if (keyArray[0] == '0')
+	{
+		 if ((AES_set_encrypt_key(newKeyArray, 128, &this->key)!=0) == 0)
+		 	return true;
 	}
-	
-	//handles decryption
-	else{
-	
-		return AES_set_decrypt(key,128,&this->dec_key);
+	else
+	{
+		if ((AES_set_decrypt_key(newKeyArray, 128, &this->key) != 0) == 0)
+			return true;
 	}
-	
+
 	return false;
-	
 }
 
 /**	
@@ -57,15 +55,15 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
 {
 	
 	//TODO: 1. Dynamically allocate a block to store the ciphertext.
+	unsigned char* cipherText = new unsigned char[17];
+	// Clear the buffer
+	memset(cipherText, 0, 17);
 	//	2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
-	// 	3. Return the pointer to the ciphertext
-	//1.
-	unsigned char* citext = new unsigned char[16];
-	//2.
-	AES_ecb_encrypt(plainText,citext,&this->enckey,AES_ENCRYPT);
-	//3.
-	return citext;	
+	AES_ecb_encrypt(plainText, cipherText, &this->key, AES_ENCRYPT);
+	// 	3. Return the pointer to the ciphertext		
+	return cipherText;	
+
 }
 
 /**
@@ -77,15 +75,19 @@ unsigned char* AES::decrypt(const unsigned char* cipherText)
 {
 	
 	//TODO: 1. Dynamically allocate a block to store the plaintext.
+	unsigned char* plainText = new unsigned char[17];
+	// Clear the buffer 
+	memset(plainText, 0, 17);
 	//	2. Use AES_ecb_encrypt(...) to decrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
+	AES_ecb_encrypt(cipherText, plainText, &this->key, AES_DECRYPT);
 	// 	3. Return the pointer to the plaintext
 	//1.
 	unsigned char* citext = new unsigned char[17];
 	//2.
 	AES_ecb_encrypt(cipherText, citext, &this->dec_key, AES_DECRYPT);
 		
-	return citext;
+	return plainText;
 }
 
 
