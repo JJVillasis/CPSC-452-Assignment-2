@@ -25,7 +25,6 @@ bool AES::setKey(const unsigned char* keyArray)
 	// Both functions return 0 on success and other values on faliure.
 	// For documentation, please see https://boringssl.googlesource.com/boringssl/+/2623/include/openssl/aes.h
 	// and aes.cpp example provided with the assignment.
-	
 	// Create new array with 16 bytes to validate if key
 	unsigned char* newKeyArray = new unsigned char[32];
 
@@ -43,6 +42,7 @@ bool AES::setKey(const unsigned char* keyArray)
 		if ((AES_set_decrypt_key(newKeyArray, 128, &this->key) != 0) == 0)
 			return true;
 	}
+
 	return false;
 }
 
@@ -61,9 +61,9 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
 	//	2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
 	AES_ecb_encrypt(plainText, cipherText, &this->key, AES_ENCRYPT);
-	// 	3. Return the pointer to the ciphertext
-		
+	// 	3. Return the pointer to the ciphertext		
 	return cipherText;	
+
 }
 
 /**
@@ -82,6 +82,10 @@ unsigned char* AES::decrypt(const unsigned char* cipherText)
 	//	and the aes.cpp example provided.
 	AES_ecb_encrypt(cipherText, plainText, &this->key, AES_DECRYPT);
 	// 	3. Return the pointer to the plaintext
+	//1.
+	unsigned char* citext = new unsigned char[17];
+	//2.
+	AES_ecb_encrypt(cipherText, citext, &this->dec_key, AES_DECRYPT);
 		
 	return plainText;
 }
