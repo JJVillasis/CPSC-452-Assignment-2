@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <openssl/aes.h>
+#include <iostream>
+using namespace std;
 
 /* Compilation */
 /* g++ myaes.cpp -o myaes -lcrypto */
@@ -35,10 +37,10 @@ int main( )
 		fprintf(stderr, "AES_set_encrypt_key() failed!\n");
 		exit(-1);
 	}
-
+	
 	/* Encrypt! */
 	AES_ecb_encrypt(aes_input, enc_out, &enc_key, AES_ENCRYPT);
-
+	cout << enc_out << endl;
 	/** Now, lets decrypt the text we have encrypted **/
 	
 	
