@@ -10,7 +10,7 @@
  */
 bool AES::setKey(const unsigned char* keyArray)
 {
-	
+
 	// TODO: AES implementation of openssl cares about whether
 	// you are encrypting or decrypting when setting the key.
 	// That is, when encrypting you use function AES_set_encrypt_key(...)
@@ -30,7 +30,7 @@ bool AES::setKey(const unsigned char* keyArray)
 
 	copy(keyArray + 2, keyArray + 31, newKeyArray);
 	// newKeyArray should have 16 bytes now
-	// Check if we are doing enc or dec 
+	// Check if we are doing enc or dec
 	int test;
 	if (keyArray[0] == '0')
 	{
@@ -46,14 +46,14 @@ bool AES::setKey(const unsigned char* keyArray)
 	return false;
 }
 
-/**	
+/**
  * Encrypts a plaintext string
  * @param plaintext - the plaintext string
  * @return - the encrypted ciphertext string
  */
 unsigned char* AES::encrypt(const unsigned char* plainText)
 {
-	
+
 	//TODO: 1. Dynamically allocate a block to store the ciphertext.
 	unsigned char* cipherText = new unsigned char[17];
 	// Clear the buffer
@@ -61,8 +61,8 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
 	//	2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
 	AES_ecb_encrypt(plainText, cipherText, &this->key, AES_ENCRYPT);
-	// 	3. Return the pointer to the ciphertext		
-	return cipherText;	
+	// 	3. Return the pointer to the ciphertext
+	return cipherText;
 
 }
 
@@ -73,22 +73,15 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
  */
 unsigned char* AES::decrypt(const unsigned char* cipherText)
 {
-	
+
 	//TODO: 1. Dynamically allocate a block to store the plaintext.
 	unsigned char* plainText = new unsigned char[17];
-	// Clear the buffer 
+	// Clear the buffer
 	memset(plainText, 0, 17);
 	//	2. Use AES_ecb_encrypt(...) to decrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
 	AES_ecb_encrypt(cipherText, plainText, &this->key, AES_DECRYPT);
 	// 	3. Return the pointer to the plaintext
-	//1.
-	unsigned char* citext = new unsigned char[17];
-	//2.
-	AES_ecb_encrypt(cipherText, citext, &this->dec_key, AES_DECRYPT);
-		
+
 	return plainText;
 }
-
-
-
